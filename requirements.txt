@@ -59,3 +59,4 @@ Werkzeug==2.0.1
 wrapt==1.12.1
 xgboost==1.4.2
 zipp==3.4.1
+hy_tools_lite
