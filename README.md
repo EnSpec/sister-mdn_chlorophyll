@@ -1,5 +1,3 @@
-# Product Estimation
-
 This repo contains code to estimate chlorophyll A concentration from hyperspectral imagery using the
 method of Pahlevan et al (2021). The code consists of a wrapper around chlorophyll A MDN estimator from:
 
@@ -11,6 +9,9 @@ Remote Sensing of Environment, 253, 112200.
 https://doi.org/10.1016/j.rse.2020.112200
 
 Prior to the application of the algorithm image spectral data is interpolated to match wavelength centers of the HICO imager.
+
+---
+# Product Estimation
 
 
 ### About
