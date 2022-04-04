@@ -10,6 +10,12 @@ https://doi.org/10.1016/j.rse.2020.112200
 
 Prior to the application of the algorithm image spectral data is interpolated to match wavelength centers of the HICO imager.
 
+## Use
+
+```bash
+python run_mdn.py reflectance_image output_directory
+```
+
 ---
 # Product Estimation
 
