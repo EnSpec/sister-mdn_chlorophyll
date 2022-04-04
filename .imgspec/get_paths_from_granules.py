@@ -14,14 +14,15 @@ def main():
     paths = []
 
     if instrument == "PRISMA":
-        paths+= glob.glob(os.path.join(input_dir, "*", "*rfl_prj"))
+        paths+= glob.glob(os.path.join(input_dir, "*", "*rfl*"))
 
     elif instrument == "AVIRIS":
-        paths+= glob.glob(os.path.join(input_dir, "*rfl*", "*rfl")
+        paths+= glob.glob(os.path.join(input_dir, "*rfl*", "*rfl"))
         paths+= glob.glob(os.path.join(input_dir, "*rfl*", "*corr*img"))
 
     for path in paths:
-        print(path)
+        if not path.endswith('.hdr'):
+            print(path)
 
 if __name__ == "__main__":
     main()
