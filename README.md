@@ -1,5 +1,18 @@
 # Product Estimation
 
+This repo contains code to estimate chlorophyll A concentration from hyperspectral imagery using the
+method of Pahlevan et al (2021). The code consists of a wrapper around chlorophyll A MDN estimator from:
+
+Pahlevan, N., Smith, B., Binding, C., Gurlin,
+D., Li, L., Bresciani, M., & Giardino, C. (2021).
+Hyperspectral retrievals of phytoplankton absorption
+and chlorophyll-a in inland and nearshore coastal waters.
+Remote Sensing of Environment, 253, 112200.
+https://doi.org/10.1016/j.rse.2020.112200
+
+Prior to the application of the algorithm image spectral data is interpolated to match wavelength centers of the HICO imager.
+
+
 ### About
 This repository contains source code for the following papers:
 
@@ -26,11 +39,11 @@ from MDN import image_estimates, get_tile_data, get_sensor_bands
 sensor = "<OLI, MSI, OLCI, or HICO>"
 
 # Tile should be the output of an atmospheric correction program e.g. SeaDAS
-bands, Rrs = get_tile_data("path/to/my/tile.nc", sensor, allow_neg=False) 
+bands, Rrs = get_tile_data("path/to/my/tile.nc", sensor, allow_neg=False)
 chla, idxs = image_estimates(Rrs, sensor=sensor)
 
 # Or, with just random data:
-import numpy as np 
+import numpy as np
 random_data = np.random.rand(3, 3, len(get_sensor_bands(sensor)))
 chla, idxs  = image_estimates(random_data, sensor=sensor)
 ```
@@ -39,9 +52,9 @@ Or, a .csv file may be given as input, with each row as a single sample. The .cs
 
 `python3 -m MDN --sensor <OLI, MSI, OLCI, or HICO> path/to/my/Rrs.csv`
 
-*Note:* The user-supplied input values should correspond to R<sub>rs</sub> (units of 1/sr). 
+*Note:* The user-supplied input values should correspond to R<sub>rs</sub> (units of 1/sr).
 
-Current performance is shown in the following scatter plots, with 50% of the data used for training and 50% for testing. Note that the models supplied in this repository are trained using 100% of the <i>in situ</i> data, and so observed performance may differ slightly. 
+Current performance is shown in the following scatter plots, with 50% of the data used for training and 50% for testing. Note that the models supplied in this repository are trained using 100% of the <i>in situ</i> data, and so observed performance may differ slightly.
 
 <p align="center">
 	<img src=".res/S2B_benchmark.png?raw=true" height="311" width="721.5"></img>
@@ -49,6 +62,3 @@ Current performance is shown in the following scatter plots, with 50% of the dat
 	<br>
 	<img src=".res/OLCI_benchmark.png?raw=true" height="311" width="721.5"></img>
 </p>
-
-
-
