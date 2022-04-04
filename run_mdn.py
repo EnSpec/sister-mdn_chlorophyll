@@ -68,7 +68,7 @@ def main():
         water = (ndvi[iterator.current_line:iterator.current_line+chunk.shape[0],
                       iterator.current_column:iterator.current_column+chunk.shape[1]] < ndvi_thres).sum()
         if water > 0:
-            interper = interp1d(rfl.wavelengths,chunk)
+            interper = interp1d(rfl.wavelengths,chunk,fill_value='extrapolate')
             hico_chunk = interper(HICO_WAVES)
             chla, idxs  = image_estimates(hico_chunk, sensor='HICO')
             chl[iterator.current_line:iterator.current_line+chunk.shape[0],
