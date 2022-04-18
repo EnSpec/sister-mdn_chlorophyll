@@ -13,11 +13,11 @@ base=$(basename $tar_file)
 #echo $base
 scene_id=${base%.tar.gz}
 
-if  [[$scene_id == ang* ]]; then
-    out_dir==$(echo $scene_id | cut -c1-18)_chla
-elif [[ $scene_id == PRS* ]]; then
+if  [[ $scene_id == "ang"* ]]; then
+    out_dir=$(echo $scene_id | cut -c1-18)_chla
+elif [[ $scene_id == "PRS"* ]]; then
     out_dir=$(echo $scene_id | cut -c1-38)_chla
-elif [[ $scene_id == f* ]]; then
+elif [[ $scene_id == "f"* ]]; then
     out_dir=$(echo $scene_id | cut -c1-16)_chla
 fi
 
