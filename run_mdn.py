@@ -17,7 +17,8 @@ import argparse
 import sys
 import numpy as np
 import hytools_lite as htl
-from hytools_lite.io.envi import WriteENVI
+from hytools_lite.io.envi import WriteENVI, envi_header_dict
+
 from MDN import image_estimates
 from scipy.interpolate import interp1d
 
@@ -26,6 +27,15 @@ HICO_WAVES = [409, 415, 421, 426, 432, 438, 444, 449, 455, 461, 467, 472, 478, 4
              501, 507, 512, 518, 524, 530, 535, 541, 547, 553, 558, 564, 570, 575, 581, 587, 593, 598,
              604, 610, 616, 621, 627, 633, 638, 644, 650, 656, 661, 667, 673, 679, 684, 690, 696,
              701, 707, 713]
+
+def name_cleanup(base_name):
+    if base_name.startswith('PRS'):
+        base_name =base_name[:38]
+    if base_name.startswith('ang'):
+        base_name =base_name[:18]
+    elif base_name.startswith('f'):
+        base_name =base_name[:31]
+    return base_name
 
 def main():
     ''' Estimate chlorophyll A concentration from hyperspectral imagery.
@@ -79,13 +89,19 @@ def main():
     chl[~rfl.mask['no_data']] = -9999
 
     # Export chlorophyll A map
-    chla_header = rfl.get_header()
+    chla_header =  envi_header_dict()
+    chla_header['header offset'] = 0
+    chla_header['data type'] = 4
+    chla_header['interleave'] ='bil'
+    chla_header['byte order'] = 0
+    chla_header['lines'] =rfl.lines
+    chla_header['samples'] =rfl.columns
     chla_header['bands']= 1
-    chla_header['band names']= ['chla']
-    chla_header['wavelength']= []
-    chla_header['fwhm']= []
+    chla_header['map info'] = rfl.get_header()['map info']
+    chla_header['description']= 'Chlorophyll A content mg-m3'
+    chla_header['band names']= ['chlorophyll_a']
     chla_header['data ignore value']= -9999
-    out_file = "%s/%s_chla" % (out_dir,rfl.base_name)
+    out_file = "%s/%s_chla" % (out_dir,name_cleanup(rfl.base_name))
     writer = WriteENVI(out_file,chla_header)
     writer.write_band(chl,0)
 
