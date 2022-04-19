@@ -22,7 +22,7 @@ def main():
         paths+= glob.glob(os.path.join(input_dir, "*", "*corr*"))
 
     for path in paths:
-        if not path.endswith('.hdr'):
+        if not path.endswith('.hdr') and ('h2o' not in path):
             print(path)
 
 if __name__ == "__main__":
