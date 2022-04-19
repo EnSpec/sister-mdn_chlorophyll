@@ -19,6 +19,7 @@ def main():
     elif instrument == "AVIRIS":
         paths+= glob.glob(os.path.join(input_dir, "*", "*rfl*"))
         paths+= glob.glob(os.path.join(input_dir, "*", "*corr*img"))
+        paths+= glob.glob(os.path.join(input_dir, "*", "*corr*"))
 
     for path in paths:
         if not path.endswith('.hdr'):
