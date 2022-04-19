@@ -3,8 +3,8 @@ pge_dir=$(dirname ${imgspec_dir})
 
 source activate base
 rm ${pge_dir}/Weights/HICO/*
-wget https://github.com/EnSpec/sister-mdn_chlorophyll/blob/master/Weights/HICO/45313342cb628c8cf45b6e2e29f4dc9a780ee1d403bdb98461e28fcb13ad9ce3.zip -p ${pge_dir}/Weights/HICO
-python ${pge_dir}/setup.py install
+wget -P ${pge_dir}/MDN/Weights/HICO https://github.com/EnSpec/sister-mdn_chlorophyll/raw/master/Weights/HICO/45313342cb628c8cf45b6e2e29f4dc9a780ee1d403bdb98461e28fcb13ad9ce3.zip
+#python ${pge_dir}/setup.py install
 
 mkdir output
 tar_file=$(ls input/*tar.gz)
