@@ -21,6 +21,8 @@ def main():
         paths+= glob.glob(os.path.join(input_dir, "*", "*corr*img"))
         paths+= glob.glob(os.path.join(input_dir, "*", "*corr*"))
 
+    paths = set(paths)
+
     for path in paths:
         if not path.endswith('.hdr') and ('h2o' not in path):
             print(path)
