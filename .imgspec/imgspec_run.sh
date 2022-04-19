@@ -2,7 +2,7 @@ imgspec_dir=$(cd "$(dirname "$0")" ; pwd -P)
 pge_dir=$(dirname ${imgspec_dir})
 
 source activate base
-rm ${pge_dir}/Weights/HICO/*
+rm ${pge_dir}/MDN/Weights/HICO/*
 wget -P ${pge_dir}/MDN/Weights/HICO https://github.com/EnSpec/sister-mdn_chlorophyll/raw/master/Weights/HICO/45313342cb628c8cf45b6e2e29f4dc9a780ee1d403bdb98461e28fcb13ad9ce3.zip
 
 mkdir output
@@ -32,4 +32,4 @@ for a in `python ${imgspec_dir}/get_paths_from_granules.py`;
 
 cd output
 tar -czvf $output_dir.tar.gz $out_dir
-#rm -r $output_dir
+rm -r $output_dir
