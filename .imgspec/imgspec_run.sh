@@ -30,5 +30,5 @@ for a in `python ${imgspec_dir}/get_paths_from_granules.py`;
   done
 
 cd output
-tar -czvf $output_dir.tar.gz $out_dir
-rm -r $output_dir
+tar -czvf $out_dir.tar.gz $out_dir
+rm -r $out_dir
