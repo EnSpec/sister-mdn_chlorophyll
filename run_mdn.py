@@ -28,14 +28,6 @@ HICO_WAVES = [409, 415, 421, 426, 432, 438, 444, 449, 455, 461, 467, 472, 478, 4
              604, 610, 616, 621, 627, 633, 638, 644, 650, 656, 661, 667, 673, 679, 684, 690, 696,
              701, 707, 713]
 
-def name_cleanup(base_name):
-    if base_name.startswith('PRS'):
-        base_name =base_name[:38]
-    if base_name.startswith('ang'):
-        base_name =base_name[:18]
-    elif base_name.startswith('f'):
-        base_name =base_name[:31]
-    return base_name
 
 def main():
     ''' Estimate chlorophyll A concentration from hyperspectral imagery.
@@ -101,7 +93,7 @@ def main():
     chla_header['description']= 'Chlorophyll A content mg-m3'
     chla_header['band names']= ['chlorophyll_a']
     chla_header['data ignore value']= -9999
-    out_file = "%s/%s_aqchla" % (out_dir,name_cleanup(rfl.base_name))
+    out_file = "%s/%s_aqchla" % (out_dir,rfl.base_name[:-3])
     writer = WriteENVI(out_file,chla_header)
     writer.write_band(chl,0)
 
