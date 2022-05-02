@@ -101,7 +101,7 @@ def main():
     chla_header['description']= 'Chlorophyll A content mg-m3'
     chla_header['band names']= ['chlorophyll_a']
     chla_header['data ignore value']= -9999
-    out_file = "%s/%s_chla" % (out_dir,name_cleanup(rfl.base_name))
+    out_file = "%s/%s_aqchla" % (out_dir,name_cleanup(rfl.base_name))
     writer = WriteENVI(out_file,chla_header)
     writer.write_band(chl,0)
 
