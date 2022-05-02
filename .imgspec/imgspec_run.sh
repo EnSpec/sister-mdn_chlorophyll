@@ -1,8 +1,6 @@
 imgspec_dir=$(cd "$(dirname "$0")" ; pwd -P)
 pge_dir=$(dirname ${imgspec_dir})
 
-rm ${pge_dir}/MDN/Weights/HICO/*
-wget -P ${pge_dir}/MDN/Weights/HICO https://github.com/EnSpec/sister-mdn_chlorophyll/raw/master/Weights/HICO/45313342cb628c8cf45b6e2e29f4dc9a780ee1d403bdb98461e28fcb13ad9ce3.zip
 
 mkdir output
 tar_file=$(ls input/*tar.gz)
@@ -12,22 +10,21 @@ base=$(basename $tar_file)
 scene_id=${base%.tar.gz}
 
 if  [[ $scene_id == "ang"* ]]; then
-    out_dir=$(echo $scene_id | cut -c1-18)_chla
+    out_dir=$(echo $scene_id | cut -c1-18)_aqchla
 elif [[ $scene_id == "PRS"* ]]; then
-    out_dir=$(echo $scene_id | cut -c1-38)_chla
+    out_dir=$(echo $scene_id | cut -c1-38)_aqchla
 elif [[ $scene_id == "f"* ]]; then
-    out_dir=$(echo $scene_id | cut -c1-16)_chla
+    out_dir=$(echo $scene_id | cut -c1-16)_aqchla
+elif [[ $scene_id == "DESIS"* ]]; then
+    out_dir=$(echo $scene_id | cut -c1-44)_aqchla
 fi
 
-#echo $out_dir
 mkdir output/$out_dir
 
 tar -xzvf $tar_file -C input
 
-for a in `python ${imgspec_dir}/get_paths_from_granules.py`;
-   do
-       python ${pge_dir}/run_mdn.py $a output/$out_dir;
-  done
+# Resample uncertainty and reflectance
+python ${pge_dir}/run_mdn.py input/*/*rfl output/$out_dir
 
 cd output
 tar -czvf $out_dir.tar.gz $out_dir
