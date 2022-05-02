@@ -1,6 +1,7 @@
 imgspec_dir=$(cd "$(dirname "$0")" ; pwd -P)
 pge_dir=$(dirname ${imgspec_dir})
 
+source activate sister
 
 mkdir output
 tar_file=$(ls input/*tar.gz)
