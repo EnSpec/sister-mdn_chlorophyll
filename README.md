@@ -13,7 +13,7 @@ Prior to the application of the algorithm image spectral data is interpolated to
 ## Use
 
 ```bash
-python run_mdn.py reflectance_image output_directory
+python run_mdn.py reflectance_image fractional_cover_image output_directory
 ```
 
 ---
