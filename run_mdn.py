@@ -16,11 +16,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import argparse
 import sys
 import numpy as np
-import hytools_lite as htl
-from hytools_lite.io.envi import WriteENVI, envi_header_dict
-
+import hytools as ht
+from hytools.io.envi import WriteENVI, envi_header_dict
 from MDN import image_estimates
 from scipy.interpolate import interp1d
+
+try:
+    from osgeo import gdal
+except:
+    import gdal
 
 
 HICO_WAVES = [409, 415, 421, 426, 432, 438, 444, 449, 455, 461, 467, 472, 478, 484, 490, 495,
@@ -47,18 +51,21 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('rfl_file', type=str,
                         help='Input reflectance image')
+    parser.add_argument('frac_cover_file', type=str,
+                        help='Fractional cover dataset')
     parser.add_argument('out_dir', type=str,
                           help='Output directory')
+
     args = parser.parse_args()
 
     out_dir = args.out_dir+'/' if not args.out_dir.endswith('/') else args.out_dir
 
-    rfl = htl.HyTools()
+    rfl = ht.HyTools()
     rfl.read_file(args.rfl_file,'envi')
 
-    #Use NDVI as a water mask
-    ndvi = rfl.ndi()
-    ndvi_thres = 0.1
+    # frc = gdal.Open(args.frac_cover_file)
+    # water_cover = frc.GetRasterBand(3).ReadAsArray()
+    mask =  rfl.ndi() < .1
 
     #Clear system arguments, needed or else error thrown by MDN function
     sys.argv = [sys.argv[0]]
@@ -67,8 +74,8 @@ def main():
     iterator =rfl.iterate(by = 'chunk',chunk_size = (500,500))
     while not iterator.complete:
         chunk = iterator.read_next()/np.pi
-        water = (ndvi[iterator.current_line:iterator.current_line+chunk.shape[0],
-                      iterator.current_column:iterator.current_column+chunk.shape[1]] < ndvi_thres).sum()
+        water = mask[iterator.current_line:iterator.current_line+chunk.shape[0],
+                      iterator.current_column:iterator.current_column+chunk.shape[1]].sum()
         if water > 0:
             interper = interp1d(rfl.wavelengths,chunk,fill_value='extrapolate')
             hico_chunk = interper(HICO_WAVES)
@@ -77,7 +84,7 @@ def main():
                 iterator.current_column:iterator.current_column+chunk.shape[1]] = chla[:,:,0]
 
     #Mask pixels outside of bounds
-    chl[ndvi > ndvi_thres] = -9999
+    chl[~mask] = -9999
     chl[~rfl.mask['no_data']] = -9999
 
     # Export chlorophyll A map
@@ -93,7 +100,7 @@ def main():
     chla_header['description']= 'Chlorophyll A content mg-m3'
     chla_header['band names']= ['chlorophyll_a']
     chla_header['data ignore value']= -9999
-    out_file = "%s/%s_aqchla" % (out_dir,rfl.base_name[:-4])
+    out_file = f"{out_dir}/{rfl.base_name[:-4]}_aqchla"
     writer = WriteENVI(out_file,chla_header)
     writer.write_band(chl,0)
 
