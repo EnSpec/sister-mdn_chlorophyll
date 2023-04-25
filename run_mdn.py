@@ -63,9 +63,8 @@ def main():
     rfl = ht.HyTools()
     rfl.read_file(args.rfl_file,'envi')
 
-    # frc = gdal.Open(args.frac_cover_file)
-    # water_cover = frc.GetRasterBand(3).ReadAsArray()
-    mask =  rfl.ndi() < .1
+    frc = gdal.Open(args.frac_cover_file)
+    mask = frc.GetRasterBand(3).ReadAsArray() > .9
 
     #Clear system arguments, needed or else error thrown by MDN function
     sys.argv = [sys.argv[0]]
